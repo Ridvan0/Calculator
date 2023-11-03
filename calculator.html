@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hesap Makinesi</title>
+  <style>
+    .calculator {
+      width: 228px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 5px;
+    }
+
+    button {
+      width: 48px;
+      height: 48px;
+      font-size: 18px;
+      margin: 3px;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <input type="text" id="display" disabled>
+    <button onclick="appendToDisplay('7')">7</button>
+    <button onclick="appendToDisplay('8')">8</button>
+    <button onclick="appendToDisplay('9')">9</button>
+    <button onclick="appendToDisplay('+')">+</button>
+    <button onclick="appendToDisplay('4')">4</button>
+    <button onclick="appendToDisplay('5')">5</button>
+    <button onclick="appendToDisplay('6')">6</button>
+    <button onclick="appendToDisplay('-')">-</button>
+    <button onclick="appendToDisplay('1')">1</button>
+    <button onclick="appendToDisplay('2')">2</button>
+    <button onclick="appendToDisplay('3')">3</button>
+    <button onclick="appendToDisplay('*')">*</button>
+    <button onclick="appendToDisplay('0')">0</button>
+    <button onclick="appendToDisplay('.')">.</button>
+    <button onclick="appendToDisplay('/')">/</button>
+    <button onclick="calculateResult()">=</button>
+    <button onclick="clearDisplay()">C</button>
+  </div>
+
+<script>
+    let displayValue = '';
+
+function appendToDisplay(value) {
+  if (/[0-9+\-*/.]/.test(value)) { // Sadece sayılar ve operatörleri kabul et
+    displayValue += value;
+    document.getElementById("display").value = displayValue;
+  }
+}
+
+function clearDisplay() {
+  displayValue = '';
+  document.getElementById("display").value = '';
+}
+
+function calculateResult() {
+  try {
+    const result = new Function('return ' + displayValue)();
+    document.getElementById("display").value = result;
+    displayValue = result.toString();
+  } catch (error) {
+    document.getElementById("display").value = "Hata";
+    displayValue = '';
+  }
+}
+
+document.addEventListener('keydown', function(event) {
+  const key = event.key;
+  if (key === 'Enter') {
+    calculateResult();
+  } else if (key === 'Escape') {
+    clearDisplay();
+  } else if (key === 'Delete') {
+    // Silme işlemi (son karakteri sil)
+    displayValue = displayValue.slice(0, -1);
+    document.getElementById("display").value = displayValue;
+  }else if (/[0-9+\-*/.]/.test(key)) {
+    appendToDisplay(key);
+  }
+});
+
+
+</script>
+</body>
+</html>
